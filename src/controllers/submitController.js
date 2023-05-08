@@ -1,4 +1,5 @@
 const submitService = require("../services/submitService");
+const BaseLogger = require("../middleware/BaseLogger");
 
 const submitNewTool = (req, res) => {
     const { body } = req;
@@ -9,7 +10,10 @@ const submitNewTool = (req, res) => {
         !body.toolShortDescription ||
         !body.toolDescription ||
         !body.Email) {
-        res.send(400).send("Missing Parameters"); // Technically should tell which parameter is missing and should also do type checking
+        //log the failed request
+        BaseLogger.logger.log("Missing Parameters and it is from"+req.socket.remoteAddress);
+        res.set({'content-type':'text/plain'});
+        res.sendStatus(400).send("Missing Parameter"); // Technically should tell which parameter is missing and should also do type checking
         return;
     }
 
